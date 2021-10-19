@@ -32,7 +32,7 @@ class _ShareDialogState extends State<ShareDialog> {
             share();
             Navigator.of(context).pop();
           },
-          child: const Text('Share!'),
+          child: const Text('Share'),
         )
       ],
     );

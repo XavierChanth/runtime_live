@@ -1,6 +1,7 @@
 import 'package:at_client/at_client.dart';
 import 'package:at_commons/at_commons.dart';
 import 'package:episode_002/models/todo.dart';
+import 'package:episode_002/widgets/delete_dialog.dart';
 import 'package:episode_002/widgets/share_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -13,12 +14,21 @@ class TodoItem extends StatefulWidget {
 
 class _TodoItemState extends State<TodoItem> {
   late Todo todo;
+  bool deleted = false;
 
   void share(String shareWith) {
     AtClient atClient = AtClientManager.getInstance().atClient;
     AtKey k = widget.todo.key;
     k.sharedWith = shareWith;
     atClient.put(k, todo);
+  }
+
+  void delete() {
+    AtClient atClient = AtClientManager.getInstance().atClient;
+    atClient.delete(widget.todo.key);
+    setState(() {
+      deleted = true;
+    });
   }
 
   @override
@@ -29,22 +39,40 @@ class _TodoItemState extends State<TodoItem> {
 
   @override
   Widget build(BuildContext context) {
+    if (deleted) return Container();
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Checkbox(
-          value: todo.checked,
-          onChanged: (checked) {
-            setState(() {
-              todo.checked = checked ?? false;
-            });
-          },
+        Row(
+          children: [
+            Checkbox(
+              value: todo.checked,
+              onChanged: (checked) {
+                setState(() {
+                  todo.checked = checked ?? false;
+                });
+              },
+            ),
+            Text(todo.value),
+          ],
         ),
-        Text(todo.value),
-        IconButton(
-          icon: const Icon(Icons.share),
-          onPressed: () {
-            showDialog(context: context, builder: (_) => ShareDialog(share));
-          },
+        Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.share),
+              onPressed: () {
+                showDialog(
+                    context: context, builder: (_) => ShareDialog(share));
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                showDialog(
+                    context: context, builder: (_) => DeleteDialog(delete));
+              },
+            )
+          ],
         )
       ],
     );
