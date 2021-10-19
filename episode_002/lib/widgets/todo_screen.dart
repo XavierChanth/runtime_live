@@ -46,7 +46,6 @@ class _TodoScreenState extends State<TodoScreen> {
       todos.addAll({key: t});
     });
     atClient.put(key, t.toJson());
-    AtClientManager.getInstance().syncService.sync();
   }
 
   @override

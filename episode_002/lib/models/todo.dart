@@ -12,6 +12,6 @@ class Todo {
   }
 
   String toJson() {
-    return jsonEncode({value: value, checked: checked});
+    return jsonEncode({'value': value, 'checked': checked});
   }
 }
