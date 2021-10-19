@@ -62,6 +62,7 @@ class _MyAppState extends State<MyApp> {
                   appAPIKey: AtEnv.appApiKey,
                   onboard: (value, atsign) {
                     _logger.finer('Successfully onboarded $atsign');
+                    print(AtEnv.appNamespace);
                   },
                   onError: (error) {
                     _logger.severe('Onboarding throws $error error');

@@ -1,4 +1,5 @@
 import 'package:at_client/at_client.dart';
+import 'package:at_client/src/service/notification_service.dart';
 import 'package:at_commons/at_commons.dart';
 import 'package:episode_002/models/todo.dart';
 import 'package:episode_002/widgets/delete_dialog.dart';
@@ -17,10 +18,12 @@ class _TodoItemState extends State<TodoItem> {
   bool deleted = false;
 
   void share(String shareWith) {
-    AtClient atClient = AtClientManager.getInstance().atClient;
+    AtClientManager atClientManager = AtClientManager.getInstance();
     AtKey k = widget.todo.key;
     k.sharedWith = shareWith;
-    atClient.put(k, todo);
+    String v = todo.toJson();
+    atClientManager.atClient.put(k, v);
+    atClientManager.notificationService.notify(NotificationParams.forUpdate(k));
   }
 
   void delete() {

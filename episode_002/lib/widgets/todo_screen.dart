@@ -25,6 +25,21 @@ class _TodoScreenState extends State<TodoScreen> {
     atsign = atClient.getCurrentAtSign()!;
   }
 
+  void subscribe() {
+    Stream<AtNotification> notifications = AtClientManager.getInstance()
+        .notificationService
+        .subscribe(regex: 'item-');
+    notifications.forEach((element) {
+      print('got notification');
+      var key = AtKey.fromString(element.key);
+      atClient.get(key).then((value) {
+        setState(() {
+          todos[key] = Todo.fromJson(value.value);
+        });
+      });
+    });
+  }
+
   void loadTodos() async {
     atClient.getAtKeys(regex: 'item-').then((keys) {
       for (AtKey key in keys) {

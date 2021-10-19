@@ -12,7 +12,10 @@ class _ShareDialogState extends State<ShareDialog> {
 
   void share() {
     if (controller.text.isEmpty) return;
-    widget.callback('@' + controller.text);
+    String text = controller.text.trim();
+    if (text[0] != '@') text = '@' + text;
+    print(text);
+    widget.callback(text);
   }
 
   @override
